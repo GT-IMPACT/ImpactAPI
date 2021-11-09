@@ -1,0 +1,16 @@
+[
+{
+  "modid": "impactapi",
+  "name": "ImpactAPI",
+  "description": "Impact!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["4gname"],
+  "credits": "Technus, Glease",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
