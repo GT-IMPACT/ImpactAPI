@@ -1,5 +1,7 @@
 package space.impact.api.multiblocks.alignment.constructable;
 
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -30,44 +32,62 @@ public class ConstructableUtility {
 			return aPlayer instanceof EntityPlayerMP;
 		}
 		if (aPlayer instanceof EntityPlayerMP) {
-			// Построить по частицам
 			if (aPlayer.isSneaking() && aPlayer.capabilities.isCreativeMode) {
-				if (tTileEntity instanceof IConstructableProvider) {
-					IConstructable constructable = ((IConstructableProvider) tTileEntity).getConstructable();
-					if (constructable != null) {
-						constructable.construct(aStack, false);
+				if (tTileEntity instanceof IGregTechTileEntity) {
+					IMetaTileEntity metaTE = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
+					if (metaTE instanceof IConstructable) {
+						((IConstructable) metaTE).construct(aStack, false);
+					} else if (IMultiBlockInfoContainer.contains(metaTE.getClass())) {
+						IMultiBlockInfoContainer<IMetaTileEntity> imb = IMultiBlockInfoContainer.get(metaTE.getClass());
+						if (metaTE instanceof IAlignment) {
+							imb.construct(aStack, false, metaTE, ((IAlignment) metaTE).getExtendedFacing());
+						} else {
+							imb.construct(aStack, false, metaTE,
+									ExtendedFacing.of(ForgeDirection.getOrientation(((IGregTechTileEntity) tTileEntity).getFrontFacing()))
+							);
+						}
 					}
 				} else if (tTileEntity instanceof IConstructable) {
 					((IConstructable) tTileEntity).construct(aStack, false);
 				} else if (IMultiBlockInfoContainer.contains(tTileEntity.getClass())) {
-					IMultiBlockInfoContainer<TileEntity> iMultipleInfoContainer = IMultiBlockInfoContainer.get(tTileEntity.getClass());
+					IMultiBlockInfoContainer<TileEntity> imb = IMultiBlockInfoContainer.get(tTileEntity.getClass());
 					if (tTileEntity instanceof IAlignment) {
-						iMultipleInfoContainer.construct(aStack, false, tTileEntity, ((IAlignment) tTileEntity).getExtendedFacing());
+						imb.construct(aStack, false, tTileEntity, ((IAlignment) tTileEntity).getExtendedFacing());
 					} else {
-						iMultipleInfoContainer.construct(aStack, false, tTileEntity, ExtendedFacing.of(ForgeDirection.getOrientation(aSide)));
+						imb.construct(aStack, false, tTileEntity, ExtendedFacing.of(ForgeDirection.getOrientation(aSide)));
 					}
 				}
 			}
 			return true;
-			// частицы и текст на стороне клиента
 		} else if (Main.isCurrentPlayer(aPlayer)) {
-			if (tTileEntity instanceof IConstructableProvider) {
-				IConstructable constructable = ((IConstructableProvider) tTileEntity).getConstructable();
-				if (constructable != null) {
-					constructable.construct(aStack, true);
-					Main.addClientSideChatMessages(constructable.getStructureDescription(aStack));
+			if (tTileEntity instanceof IGregTechTileEntity) {
+				IMetaTileEntity metaTE = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
+				if (metaTE instanceof IConstructable) {
+					((IConstructable) metaTE).construct(aStack, true);
+					Main.addClientSideChatMessages(((IConstructable) metaTE).getStructureDescription(aStack));
+					return false;
+				} else if (IMultiBlockInfoContainer.contains(metaTE.getClass())) {
+					IMultiBlockInfoContainer<IMetaTileEntity> imb = IMultiBlockInfoContainer.get(metaTE.getClass());
+					if (metaTE instanceof IAlignment) {
+						imb.construct(aStack, true, metaTE, ((IAlignment) metaTE).getExtendedFacing());
+					} else {
+						imb.construct(aStack, true, metaTE,
+								ExtendedFacing.of(ForgeDirection.getOrientation(((IGregTechTileEntity) tTileEntity).getFrontFacing()))
+						);
+					}
+					Main.addClientSideChatMessages(IMultiBlockInfoContainer.get(metaTE.getClass()).getDescription(aStack));
+					return false;
 				}
 			} else if (tTileEntity instanceof IConstructable) {
-				IConstructable constructable = (IConstructable) tTileEntity;
-				constructable.construct(aStack, true);
-				Main.addClientSideChatMessages(constructable.getStructureDescription(aStack));
+				((IConstructable) tTileEntity).construct(aStack, true);
+				Main.addClientSideChatMessages(((IConstructable) tTileEntity).getStructureDescription(aStack));
 				return false;
 			} else if (IMultiBlockInfoContainer.contains(tTileEntity.getClass())) {
-				IMultiBlockInfoContainer<TileEntity> iMultipleInfoContainer = IMultiBlockInfoContainer.get(tTileEntity.getClass());
+				IMultiBlockInfoContainer<TileEntity> imb = IMultiBlockInfoContainer.get(tTileEntity.getClass());
 				if (tTileEntity instanceof IAlignment) {
-					iMultipleInfoContainer.construct(aStack, true, tTileEntity, ((IAlignment) tTileEntity).getExtendedFacing());
+					imb.construct(aStack, true, tTileEntity, ((IAlignment) tTileEntity).getExtendedFacing());
 				} else {
-					iMultipleInfoContainer.construct(aStack, true, tTileEntity, ExtendedFacing.of(ForgeDirection.getOrientation(aSide)));
+					imb.construct(aStack, true, tTileEntity, ExtendedFacing.of(ForgeDirection.getOrientation(aSide)));
 				}
 				Main.addClientSideChatMessages(IMultiBlockInfoContainer.get(tTileEntity.getClass()).getDescription(aStack));
 				return false;
