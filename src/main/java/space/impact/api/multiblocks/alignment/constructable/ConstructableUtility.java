@@ -1,5 +1,7 @@
 package space.impact.api.multiblocks.alignment.constructable;
 
+import cpw.mods.fml.common.Loader;
+
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,18 +35,20 @@ public class ConstructableUtility {
 		}
 		if (aPlayer instanceof EntityPlayerMP) {
 			if (aPlayer.isSneaking() && aPlayer.capabilities.isCreativeMode) {
-				if (tTileEntity instanceof IGregTechTileEntity) {
-					IMetaTileEntity metaTE = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
-					if (metaTE instanceof IConstructable) {
-						((IConstructable) metaTE).construct(aStack, false);
-					} else if (IMultiBlockInfoContainer.contains(metaTE.getClass())) {
-						IMultiBlockInfoContainer<IMetaTileEntity> imb = IMultiBlockInfoContainer.get(metaTE.getClass());
-						if (metaTE instanceof IAlignment) {
-							imb.construct(aStack, false, metaTE, ((IAlignment) metaTE).getExtendedFacing());
-						} else {
-							imb.construct(aStack, false, metaTE,
-									ExtendedFacing.of(ForgeDirection.getOrientation(((IGregTechTileEntity) tTileEntity).getFrontFacing()))
-							);
+				if (Loader.isModLoaded("gregtech")) {
+					if (tTileEntity instanceof IGregTechTileEntity) {
+						IMetaTileEntity metaTE = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
+						if (metaTE instanceof IConstructable) {
+							((IConstructable) metaTE).construct(aStack, false);
+						} else if (IMultiBlockInfoContainer.contains(metaTE.getClass())) {
+							IMultiBlockInfoContainer<IMetaTileEntity> imb = IMultiBlockInfoContainer.get(metaTE.getClass());
+							if (metaTE instanceof IAlignment) {
+								imb.construct(aStack, false, metaTE, ((IAlignment) metaTE).getExtendedFacing());
+							} else {
+								imb.construct(aStack, false, metaTE,
+										ExtendedFacing.of(ForgeDirection.getOrientation(((IGregTechTileEntity) tTileEntity).getFrontFacing()))
+								);
+							}
 						}
 					}
 				} else if (tTileEntity instanceof IConstructable) {
@@ -60,6 +64,7 @@ public class ConstructableUtility {
 			}
 			return true;
 		} else if (Main.isCurrentPlayer(aPlayer)) {
+			if (Loader.isModLoaded("gregtech")) {
 			if (tTileEntity instanceof IGregTechTileEntity) {
 				IMetaTileEntity metaTE = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
 				if (metaTE instanceof IConstructable) {
@@ -78,6 +83,7 @@ public class ConstructableUtility {
 					Main.addClientSideChatMessages(IMultiBlockInfoContainer.get(metaTE.getClass()).getDescription(aStack));
 					return false;
 				}
+			}
 			} else if (tTileEntity instanceof IConstructable) {
 				((IConstructable) tTileEntity).construct(aStack, true);
 				Main.addClientSideChatMessages(((IConstructable) tTileEntity).getStructureDescription(aStack));

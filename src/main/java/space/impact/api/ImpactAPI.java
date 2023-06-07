@@ -20,7 +20,6 @@ import static space.impact.api.Main.proxy;
  * Стабильный интерфейс к внутренним компонентам Impact API. Обратная совместимость поддерживается в максимально возможной степени.
  */
 public class ImpactAPI {
-	public static final String MOD_ID = "impactapi";
 	public static final int WHITE = 0, ORANGE = 1, MAGENTA = 2, L_BLUE = 3, YELLOW = 4, LIME = 5, PINK = 6, GRAY = 7, L_GRAY = 8, CYAN = 9, PURPLE = 10, BLUE = 11, BROWN = 12, GREEN = 13, RED = 14, BLACK = 15;
 	
 	/**

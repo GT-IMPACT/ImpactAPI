@@ -15,6 +15,8 @@ import space.impact.api.Main;
 
 import java.util.List;
 
+import static space.impact.impactapi.BuildConfigKt.MODID;
+
 public class BlockHint extends Block {
 	private static final IIcon[] hint = new IIcon[16];
 	
@@ -27,7 +29,7 @@ public class BlockHint extends Block {
 	@Override
 	public void registerBlockIcons(IIconRegister icon) {
 		for (int i = 1; i <= hint.length; i++) {
-			hint[i - 1] = icon.registerIcon(ImpactAPI.MOD_ID + ":" + i);
+			hint[i - 1] = icon.registerIcon(MODID+ ":" + i);
 		}
 	}
 	

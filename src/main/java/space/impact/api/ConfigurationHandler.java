@@ -10,6 +10,8 @@ import net.minecraftforge.common.config.Property;
 import java.io.File;
 import java.util.Map;
 
+import static space.impact.impactapi.BuildConfigKt.MODID;
+
 public enum ConfigurationHandler {
 	
 	INSTANCE;
@@ -51,7 +53,7 @@ public enum ConfigurationHandler {
 	
 	@SubscribeEvent
 	public void onConfigChange(ConfigChangedEvent.PostConfigChangedEvent e) {
-		if (e.modID.equals(ImpactAPI.MOD_ID)) {
+		if (e.modID.equals(MODID)) {
 			loadConfig();
 		}
 	}

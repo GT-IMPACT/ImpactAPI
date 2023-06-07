@@ -19,12 +19,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 
-@Mod(modid = ImpactAPI.MOD_ID, name = "Impact API", version = "0.0.1", dependencies =  "required-after:Forge@[10.13.4.1614,);")
+import static space.impact.impactapi.BuildConfigKt.*;
+
+@Mod(modid = MODID, name = MODNAME, version = VERSION, dependencies = "required-after:Forge@[10.13.4.1614,);")
 public class Main {
 
 	@SidedProxy(serverSide = "space.impact.api.proxy.CommonProxy", clientSide = "space.impact.api.proxy.ClientProxy")
 	static CommonProxy proxy;
-	static SimpleNetworkWrapper net = NetworkRegistry.INSTANCE.newSimpleChannel(ImpactAPI.MOD_ID);
+	static SimpleNetworkWrapper net = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
 	static {
 		net.registerMessage(AlignmentMessage.ServerHandler.class, AlignmentMessage.AlignmentQuery.class, 0, Side.SERVER);

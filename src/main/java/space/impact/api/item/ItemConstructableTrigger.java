@@ -11,12 +11,12 @@ import java.util.List;
 
 import static net.minecraft.util.EnumChatFormatting.RED;
 import static net.minecraft.util.StatCollector.translateToLocal;
-import static space.impact.api.ImpactAPI.MOD_ID;
+import static space.impact.impactapi.BuildConfigKt.MODID;
 
 public class ItemConstructableTrigger extends Item {
 	public ItemConstructableTrigger() {
 		setUnlocalizedName("impactapi.constructableTrigger");
-		setTextureName(MOD_ID + ":itemConstructableTrigger");
+		setTextureName(MODID + ":itemConstructableTrigger");
 		setCreativeTab(Main.creativeTab);
 	}
 	
