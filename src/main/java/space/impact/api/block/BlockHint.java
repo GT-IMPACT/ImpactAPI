@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import space.impact.api.ImpactAPI;
 import space.impact.api.Main;
 
 import java.util.List;
